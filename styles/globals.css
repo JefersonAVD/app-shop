@@ -14,6 +14,29 @@ a {
 * {
   box-sizing: border-box;
 }
+.mega-menu{
+  position: static;
+}
+.mega-menu .dropdown-menu{
+  max-width: 900px;
+  width: 100%;
+  left: 50%!important;
+  transform: translate(-50%,0%);
+  transition: all 0.2s ease-in-out;
+}
+.dropdown-menu.show{
+  animation: fadeIn 0.3s;
+}
+@keyframes fadeIn {
+  0%{
+    opacity: 0;
+    top: 30px;
+  }
+  100%{
+    opacity: 1;
+    top: 100%;
+  }
+}
 
 @media (prefers-color-scheme: dark) {
   html {
