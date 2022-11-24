@@ -9,7 +9,7 @@ export default function Layout({children}:{children:ReactElement}){
 
     return(
         <Data.Provider value={{data,isLoading,isError}}>
-            <Header process={{data,isLoading,isError}}/>
+            <Header/>
             <main>
                 {children}
             </main>

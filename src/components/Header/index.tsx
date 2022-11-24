@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { useContext } from "react";
+import { ReactElement, useContext } from "react";
 import { Col, Container, Nav, Navbar, NavDropdown, Placeholder, Row } from "react-bootstrap";
-import { Data } from "../Layout";
+import { getData } from "../../data";
+import MegaMenuItem from "../MegaMenuItem";
 
 interface process {
     data : object,
@@ -9,53 +10,61 @@ interface process {
     isError : boolean,
 }
 
-export default function Header ({process}:{process:process}){
-    const {data, isLoading, isError} = process;
+export default function Header (){
+    const categories = getData("products/categories");
+    console.log(categories.data);
 
-    if(!!data){
+    if(categories.isLoading){
         return(
-            <Navbar bg="light" sticky="top">
-                <Container>
-                    <Link className="navbar-brand" href="/">APP SHOP</Link>
-                    <Navbar.Toggle aria-controls="navbar" />
-                    <Navbar.Collapse id="navbar">
-                        <Nav className="w-100 gap-3">
-                            {Array.from(Array(5).keys()).map((ele,index)=>{
-                                return(
-                                    <Placeholder key={index} as={Nav.Link} className="w-100" ></Placeholder>
-                                )
-                            })}
-                        </Nav>
-                    </Navbar.Collapse>
-                </Container>
-            </Navbar>
+            <DivNav>
+                <Nav className="w-100 gap-3">
+                    {Array.from(Array(5).keys()).map((ele,index)=>{
+                        return(
+                            <Placeholder key={index} as={Nav.Link} className="w-100" ></Placeholder>
+                        )
+                    })}
+                </Nav>
+            </DivNav>
         )
     }
     return(
-        <div>
-            <Navbar bg="light" sticky="top" style={{}}>
-                <Container>
-                    <Link className="navbar-brand" href="/">APP SHOP</Link>
-                    <Navbar.Toggle aria-controls="navbar" />
-                    <Navbar.Collapse id="navbar">
-                        <Nav className="me-auto">
-                            <NavDropdown title="All Products" className="mega-menu">
-                                <Row>
-                                    <Col>
-                                        <h1>1</h1>
-                                    </Col>
-                                    <Col>
-                                        <h1>2</h1>
-                                    </Col>
-                                    <Col>
-                                        <h1>3</h1>
-                                    </Col>
-                                </Row>
-                            </NavDropdown>
-                        </Nav>
-                    </Navbar.Collapse>
-                </Container>
-            </Navbar>
-        </div>
+        <DivNav>
+            <Nav className="me-auto">
+                <NavDropdown title="All Products" className="mega-menu">
+                    <Container>
+                        <Row>
+                            <NavDropdown.Header>Products</NavDropdown.Header>
+                            <Col md={3}>
+                                {categories.data.map((item : string,key: number)=>{
+                                    return(
+                                        <NavDropdown.Item key={key} style={{textTransform:"capitalize"}}>
+                                            {item}
+                                        </NavDropdown.Item>
+                                    )
+                                })}
+                            </Col>
+                            <Col>
+                                <MegaMenuItem param="men's clothing"/>
+                            </Col>
+                        </Row>
+                    </Container>
+                </NavDropdown>
+            </Nav>
+        </DivNav>
     );
+}
+
+const DivNav = ({children}:{ children :ReactElement}) =>{
+    return(
+        <Navbar bg="light" sticky="top" style={{}}>
+        <Container>
+            <Link className="navbar-brand" href="/">APP SHOP</Link>
+            <Navbar.Toggle aria-controls="navbar" />
+            <Navbar.Collapse id="navbar">
+                {children}
+            </Navbar.Collapse>
+        </Container>
+    </Navbar>
+
+    )
 }
