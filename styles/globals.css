@@ -38,6 +38,12 @@ a {
   }
 }
 
+.nav-pill .nav-link.active{
+  background-color: black;
+  color:white;
+  border-radius: 5px;
+}
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;

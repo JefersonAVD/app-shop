@@ -1,18 +1,15 @@
 import Link from "next/link";
-import { ReactElement, useContext } from "react";
-import { Col, Container, Nav, Navbar, NavDropdown, Placeholder, Row } from "react-bootstrap";
+import { ReactElement, useState } from "react";
+import { Col, Container, Navbar, NavDropdown, Placeholder, Row } from "react-bootstrap";
+import Nav from "react-bootstrap/Nav"
 import { getData } from "../../data";
 import MegaMenuItem from "../MegaMenuItem";
 
-interface process {
-    data : object,
-    isLoading:boolean,
-    isError : boolean,
-}
 
 export default function Header (){
     const categories = getData("products/categories");
-    console.log(categories.data);
+    const [cat,setCat] = useState("electronics");
+    const changeCat = (item:string)=>{event?.preventDefault(); setCat(item)};
 
     if(categories.isLoading){
         return(
@@ -29,23 +26,31 @@ export default function Header (){
     }
     return(
         <DivNav>
-            <Nav className="me-auto">
+            <Nav className="me-auto" variant="tab">
+                <Nav.Item>
+                    <Nav.Link>teste</Nav.Link>
+                </Nav.Item>
                 <NavDropdown title="All Products" className="mega-menu">
                     <Container>
                         <Row>
                             <NavDropdown.Header>Products</NavDropdown.Header>
                             <Col md={3}>
-                                {categories.data.map((item : string,key: number)=>{
-                                    return(
-                                        <NavDropdown.Item key={key} style={{textTransform:"capitalize"}}>
-                                            {item}
-                                        </NavDropdown.Item>
-                                    )
-                                })}
+                                <Nav variant="pill" className="flex-column" defaultActiveKey="/">
+                                    {categories.data.map((item : string,key: number)=>{
+                                        return(
+                                            <Nav.Item key={key} >
+                                                <Nav.Link
+                                                    active={cat==item?true:false}
+                                                    onClick={()=>changeCat(item)}
+                                                    style={{textTransform:"capitalize"}}>
+                                                    {item}
+                                                </Nav.Link>
+                                            </Nav.Item>
+                                        )
+                                    })}
+                                </Nav>
                             </Col>
-                            <Col>
-                                <MegaMenuItem param="men's clothing"/>
-                            </Col>
+                            <MegaMenuItem list={categories.data} cat={cat}/>
                         </Row>
                     </Container>
                 </NavDropdown>
