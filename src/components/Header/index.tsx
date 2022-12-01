@@ -1,15 +1,30 @@
 import Link from "next/link";
-import { ReactElement, useState } from "react";
+import { ReactElement, useRef, useState } from "react";
 import { Col, Container, Navbar, NavDropdown, Placeholder, Row } from "react-bootstrap";
 import Nav from "react-bootstrap/Nav"
 import { getData } from "../../data";
 import MegaMenuItem from "../MegaMenuItem";
+
+interface Element{
+    classList: {
+        remove:Function
+    }
+    setAttribute: Function,
+    children: Array<Element> 
+}
 
 
 export default function Header (){
     const categories = getData("products/categories");
     const [cat,setCat] = useState("electronics");
     const changeCat = (item:string)=>{event?.preventDefault(); setCat(item)};
+    const reference = useRef(NavDropdown);
+    const closeNavbar= ()=>{
+        const current : Element =  reference.current ;
+        current.classList.remove("show");
+        current.children[0].setAttribute("aria-expanded",false);
+        current.children[1].classList.remove("show");
+    }
 
     if(categories.isLoading){
         return(
@@ -27,10 +42,7 @@ export default function Header (){
     return(
         <DivNav>
             <Nav className="me-auto" variant="tab">
-                <Nav.Item>
-                    <Nav.Link>teste</Nav.Link>
-                </Nav.Item>
-                <NavDropdown title="All Products" className="mega-menu">
+                <NavDropdown title="All Products" className="mega-menu" id="menu-dropdown" ref={reference}>
                     <Container>
                         <Row>
                             <NavDropdown.Header>Products</NavDropdown.Header>
@@ -50,7 +62,7 @@ export default function Header (){
                                     })}
                                 </Nav>
                             </Col>
-                            <MegaMenuItem list={categories.data} cat={cat}/>
+                            <MegaMenuItem list={categories.data} cat={cat} closeNavbar={closeNavbar}/>
                         </Row>
                     </Container>
                 </NavDropdown>

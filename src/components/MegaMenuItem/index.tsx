@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Card, Row, Col, Tab, Button } from "react-bootstrap"
+import { Card, Row, Col, Tab, Button, Dropdown, NavDropdown } from "react-bootstrap"
 import { getData } from "../../data"
 
 interface product {
@@ -12,6 +12,7 @@ interface product {
 interface props {
     list:Array<string>,
     cat:string
+    closeNavbar:Function
 }
 
 export default function MegaMenuItem (props:props){
@@ -32,8 +33,8 @@ export default function MegaMenuItem (props:props){
                                     {product.data?.map((item:product,key:number)=>{
                                         if(key>=3) return;
                                         return(   
-                                        <Col key={key} >
-                                            <Link href={`product/${item.category}/${item.id}`} className="h-100 d-flex">
+                                        <Col key={key}>
+                                            <Link href={`/product/${item.category}/${item.id}`} className="h-100 d-flex" onClick={()=>props.closeNavbar()}>
                                                 <Card>
                                                     <Card.Img height={200} className="p-2 flex-grow-1" variant="top" src={item.image} style={{objectFit:"contain"}}/>
                                                     <Card.Body>
@@ -45,7 +46,7 @@ export default function MegaMenuItem (props:props){
                                         )
                                     })}
                                 </Row>
-                                <Link href={"category/"+props.cat} >
+                                <Link href={"/products/"+props.cat} onClick={()=>props.closeNavbar()} >
                                     <Button className="mt-3">All Products</Button>
                                 </Link>
                             </Tab.Pane>

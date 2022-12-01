@@ -3,10 +3,10 @@ import axios from "axios";
 
 const Axios = axios.create({baseURL:'https://fakestoreapi.com/'})
 
-const Fetch = (url : string) => Axios.get(url).then(resp =>resp.data);
+export const Fetch = (url : string) => Axios.get(url).then(resp =>resp.data);
 
 export function getData(url : string){
-    const {data, error} = useSWR( url, Fetch );
+    const {data, error} = useSWR(url,Fetch);
 
     return{
         data:data,
